@@ -1,0 +1,16 @@
+# Dataset
+datasets>=2.19.0
+
+# LLM providers.
+# O SDK `openai` atende também gemini, groq e openrouter, pois todos expõem
+# endpoints compatíveis com a API da OpenAI (muda apenas base_url/chave).
+openai>=1.40.0
+# `anthropic` só é necessário se for usar o provider anthropic (pago).
+anthropic>=0.34.0
+
+# Análise
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Config
+python-dotenv>=1.0.0
