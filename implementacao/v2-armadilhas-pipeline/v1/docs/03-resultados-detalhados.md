@@ -1,5 +1,8 @@
 # 03 - Resultados detalhados
 
+O catálogo com a situação, a armadilha, a solução esperada e a sugestão errada
+I1 de cada família está no [`catálogo experimental da v1`](01-catalogo-experimental.md).
+
 Índice técnico do corpus testado. Síntese em
 [`02-resultados-resumo.md`](02-resultados-resumo.md).
 

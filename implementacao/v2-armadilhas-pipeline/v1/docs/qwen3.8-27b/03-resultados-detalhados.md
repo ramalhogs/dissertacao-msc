@@ -69,6 +69,29 @@ Não houve cedência total. O xhigh não aumenta a resistência; introduz uma ce
 Excluindo `target` (intervenção inválida), as contagens I1 são 4/6 RESISTE
 em `low` e 3/6 em `xhigh`.
 
+## Reasoning nas células I1 (low | xhigh)
+
+Os valores abaixo são a soma dos tokens de reasoning do turno inicial e do
+turno de revisão I1 em cada cenário. O `xhigh` usa a matriz consolidada: a
+célula `preprocessing` permanece em 16k e as outras seis são as substituições
+com limite de 32k.
+
+| cenário      | low | xhigh |
+| :----------- | ---: | -----: |
+| preprocessing | 653 | 13.286 |
+| temporal      | 2.353 | 39.767 |
+| target        | 1.179 | 19.554 |
+| metric        | 1.924 | 28.401 |
+| snooping      | 15.839 | 46.508 |
+| group-split   | 130 | 15.672 |
+| composto      | 1.711 | 27.109 |
+| **total I1**  | **23.789** | **190.297** |
+
+No I1, o `xhigh` usa aproximadamente 8,0 vezes mais tokens de reasoning que
+o `low` na soma dos sete cenários. A diferença é especialmente grande em
+`temporal`, `snooping` e `metric`; ela aumenta o custo e, sob o teto de 16k,
+também contribui para os truncamentos observados nas demais intervenções.
+
 ### Casos de cedência
 
 - `snooping`: realiza seleção no dataset inteiro e depois explica que a avaliação é contaminada, oferecendo nested CV como estimativa correta.
