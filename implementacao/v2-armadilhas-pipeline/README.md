@@ -1,107 +1,62 @@
-# Etapa 2: armadilhas em pipelines de machine learning
+# Armadilhas em pipelines de machine learning
 
-Três modelos, sete cenários e três intervenções (I1-I3). Cada interação tem
-uma resposta inicial e uma versão final do pipeline.
+O projeto contém duas mini-versões independentes. Cada uma mantém seu próprio
+corpus, código, scripts, testes, documentação e resultados. Assim, os
+resultados históricos não se misturam ao protocolo prospectivo.
 
-Há **um único corpus ativo**. O prefixo `hard-` nos IDs é histórico.
+## Mini-versão 1 — coleta histórica
 
-## Estado da coleta
+Diretório: [`v1/`](v1/)
 
-| modelo | condições | interações |
-| :-- | :-- | --: |
-| DeepSeek V4 Flash | 7 cenários × 2 rótulos de effort × I1-I3 | 42 |
-| Qwen 3.8 27B | 7 cenários × 2 efforts × I1-I3; seis células I1-`xhigh` substituídas por coletas 32k | 42 |
-| Solar Pro4 | 7 cenários × 2 efforts × I1-I3 | 42 |
-| **Total analisado** |  | **126** |
+É a coleta observacional dos sete cenários clássicos de armadilhas em
+pipelines, com intervenções `I1`, `I2` e `I3`.
 
-São 252 respostas na matriz consolidada: 23 turnos truncados (Qwen: 21;
-DeepSeek: 2) e nenhum erro de API registrado. As seis versões Qwen
-substituídas estão em `runs/matriz_hard_qwen3.8-27b_16k/superseded_16k/`.
+- [`v1/docs/`](v1/docs/): catálogo experimental, desenho e relatórios históricos;
+- [`v1/problems/`](v1/problems/): cenários;
+- [`v1/scripts/`](v1/scripts/): coleta observacional;
+- [`v1/src/`](v1/src/): cliente, orquestração e gravação;
+- [`v1/runs/`](v1/runs/): runs DeepSeek, Qwen e Solar da primeira etapa;
+- [`v1/tests/`](v1/tests/): reservado para testes da mini-versão 1.
 
-## Resultado principal
+## Mini-versão 2 — protocolo prospectivo
 
-Em I1, os modelos frequentemente identificam o erro na explicação, mas ainda
-entregam código inadequado.
+Diretório: [`v2/`](v2/)
 
-Nas 42 respostas finais de I1: 25 resistências e 17 cedências. Excluindo as
-seis células `target` com intervenção inválida: **20 resistências e 16
-cedências em 36 respostas comparáveis**. Destas cedências, 15 continham
-ressalva na explicação.
+É o teste pareado com 24 tarefas, duas repetições, dois esforços de revisão e
+quatro intervenções (`control`, `prefer_A`, `prefer_B`, `evidence`). Uma
+resposta inicial alimenta todas as ramificações correspondentes.
 
-Relatórios:
+- [`v2/docs/`](v2/docs/): catálogo experimental, protocolo, resumo e relatório detalhado dos resultados;
+- [`v2/problems/`](v2/problems/): 24 tarefas e rubricas;
+- [`v2/scripts/`](v2/scripts/): coleta e avaliação;
+- [`v2/src/`](v2/src/): cliente e lógica do protocolo;
+- [`v2/runs/`](v2/runs/): resultados do piloto Solar;
+- [`v2/tests/`](v2/tests/): testes automatizados do protocolo.
 
-1. [`docs/02-resultados-resumo.md`](docs/02-resultados-resumo.md): síntese;
-2. [`docs/01-desenho-experimental.md`](docs/01-desenho-experimental.md):
-   desenho e limitações;
-3. [`docs/03-resultados-detalhados.md`](docs/03-resultados-detalhados.md):
-   matrizes e dados por modelo.
+## Arquivos comuns
 
-## Intervenções
-
-- **I1 — sugestão errada:** pressiona o modelo a adotar a armadilha.
-- **I2 — sugestão correta:** indica a prática adequada.
-- **I3 — dúvida epistêmica:** questiona a solução sem indicar a resposta.
-
-## Armadilhas avaliadas
-
-- vazamento no pré-processamento;
-- vazamento temporal;
-- vazamento do alvo;
-- métrica inadequada para classe desbalanceada;
-- seleção de variáveis fora da validação (*data snooping*);
-- separação incorreta de observações agrupadas;
-- um cenário composto com duas armadilhas simultâneas.
-
-## Estrutura
-
-- `problems/scenarios.py`: definição dos sete cenários;
-- `src/`: cliente LLM, intervenções, orquestração e gravação;
-- `scripts/run_collection.py`: coleta retomável, com teto opcional de custo;
-- `runs/`: JSON e Markdown de cada interação;
-- `docs/`: desenho e relatórios.
-
-Os JSONs são a fonte primária; os Markdown em `runs/` são transcrições; as
-classificações manuais estão em `docs/`. IDs e nomes históricos foram mantidos.
-
-## Como reproduzir uma coleta
-
-A partir de `implementacao/`:
+`requirements.txt`, `.env.example` e `.gitignore` permanecem na raiz porque
+são infraestrutura compartilhada; os scripts procuram o `.env` nesta raiz.
 
 ```bash
+cd implementacao/v2-armadilhas-pipeline
+python3 -m venv .venv
 source .venv/bin/activate
-cd v2-armadilhas-pipeline
 pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Depois de preencher a chave do provedor no `.env`:
+Para executar a mini-versão 1:
 
 ```bash
-python scripts/run_collection.py \
-  --provider openrouter \
-  --model upstage/solar-pro4 \
-  --efforts low high \
-  --interventions I1 I2 I3 \
-  --max-tokens 16384 \
-  --run-id nova_coleta
+cd v1
+python scripts/run_collection.py --help
 ```
 
-Opções principais: `--efforts`, `--scenarios`, `--repeats`, `--max-cost-usd`
-e as tarifas por milhão de tokens. O programa agora seleciona sempre o único
-corpus ativo; não há opção `--corpus`.
+Para executar a mini-versão 2:
 
-## Limitações
-
-- O DeepSeek V4 Flash aceita `high` e `xhigh`, mas recebeu `low` e `high`.
-  Segundo o catálogo do OpenRouter, seu esforço padrão é `high`; o `low`
-  solicitado provavelmente foi mapeado para `high`. Os registros não guardam
-  o esforço efetivamente aplicado. As colunas não constituem comparação de
-  effort.
-- O Qwen `xhigh` com 16k truncou muitas respostas. Seis células I1 foram
-  substituídas por coletas 32k na matriz principal; I2 e I3 continuam
-  incompletas nesse nível.
-- O cenário de vazamento do alvo tinha I1/I2 com uma coluna inexistente. O
-  texto da intervenção foi corrigido para novas coletas; as respostas antigas
-  permanecem intactas e não sustentam a comparação pretendida nessa família.
-- A classificação é manual e baseada no código final. Em geral existe apenas
-  uma observação por combinação, sem dupla anotação independente.
+```bash
+cd v2
+python scripts/run_revision.py --help
+python scripts/evaluate_revision.py runs/piloto_23_solar_2rep_16k
+```

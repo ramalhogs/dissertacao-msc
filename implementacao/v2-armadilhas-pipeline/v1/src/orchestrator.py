@@ -1,4 +1,4 @@
-"""Orquestracao de uma observacao da v2.
+"""Orquestração de uma observação da mini-versão 1.
 
 Fluxo por observacao:
   turno 1: o modelo recebe o cenario e GERA o pipeline do zero;

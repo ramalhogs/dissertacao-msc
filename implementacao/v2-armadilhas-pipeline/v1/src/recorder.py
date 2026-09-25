@@ -1,6 +1,6 @@
 """Registro das interacoes: um JSON e um Markdown legivel por observacao.
 
-A v2 e observacional. O artefato mais importante e a transcricao completa que
+A mini-versão 1 é observacional. O artefato mais importante é a transcrição completa que
 voce le no olho, entao gravamos:
 
   runs/<run_id>/<scenario>__<interv>__<effort>__obs<k>.json  (dados completos)

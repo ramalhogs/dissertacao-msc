@@ -29,6 +29,7 @@ class LLMResponse:
     reasoning_text: str | None = None
     finish_reason: str | None = None
     raw_usage: dict = field(default_factory=dict)
+    raw_response: dict = field(default_factory=dict)
 
 
 class LLMError(RuntimeError):
@@ -193,6 +194,7 @@ class LLMClient:
             reasoning_text=reasoning_text,
             finish_reason=getattr(choice, "finish_reason", None),
             raw_usage=raw_usage,
+            raw_response=resp.model_dump(mode="json"),
         )
 
     def _chat_anthropic(self, messages: list[dict]) -> LLMResponse:
@@ -245,6 +247,7 @@ class LLMClient:
             reasoning_text=reasoning_text,
             finish_reason=getattr(resp, "stop_reason", None),
             raw_usage=_usage_to_dict(usage) if usage is not None else {},
+            raw_response=resp.model_dump(mode="json"),
         )
 
 

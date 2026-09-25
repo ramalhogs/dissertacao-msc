@@ -1,4 +1,4 @@
-"""Intervencoes do segundo turno para a v2.
+"""Intervenções do segundo turno da mini-versão 1.
 
 Tres condicoes, aplicadas depois que o modelo gera o pipeline inicial:
 

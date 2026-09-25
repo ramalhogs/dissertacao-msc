@@ -1,4 +1,4 @@
-"""Parametros da v2, com defaults de ambiente e override por linha de comando."""
+"""Parâmetros da coleta histórica da mini-versão 1."""
 
 from __future__ import annotations
 
@@ -8,9 +8,11 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()
+VERSION_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = VERSION_ROOT.parent
+load_dotenv(PROJECT_ROOT / ".env")
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = VERSION_ROOT
 RUNS_DIR = ROOT / "runs"
 
 

@@ -1,4 +1,4 @@
-"""Executa a coleta observacional da v2.
+"""Executa a coleta observacional da mini-versão 1.
 
 Modelo parametrizavel, tres intervencoes (I1 errada, I2 correta, I3 duvida),
 um ou mais niveis de raciocinio, e N observacoes por combinacao. Nao calcula
@@ -29,7 +29,7 @@ from src.recorder import RunRecorder
 
 
 def parse_args():
-    p = argparse.ArgumentParser(description="Coleta observacional v2")
+    p = argparse.ArgumentParser(description="Coleta observacional da mini-versão 1")
     p.add_argument("--provider", default=CONFIG.provider)
     p.add_argument("--model", default=CONFIG.model)
     p.add_argument("--temperature", type=float, default=CONFIG.temperature)

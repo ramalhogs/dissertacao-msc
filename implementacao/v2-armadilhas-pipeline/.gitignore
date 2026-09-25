@@ -1,5 +1,7 @@
 .env
 __pycache__/
 *.pyc
-runs/*/
-!runs/.gitkeep
+v1/runs/*/
+!v1/runs/.gitkeep
+v2/runs/*/
+!v2/runs/.gitkeep
